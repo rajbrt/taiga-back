@@ -37,6 +37,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_pgjson.fields import JsonField
 
 from taiga.auth.tokens import get_token_for_user
+from taiga.base.utils.colors import generate_random_hex_color
 from taiga.base.utils.slug import slugify_uniquely
 from taiga.base.utils.files import get_file_path
 from taiga.permissions.choices import MEMBERS_PERMISSIONS
@@ -79,10 +80,6 @@ def get_user_model_safe():
             # This must be a different case (e.g. the model really doesn't
             # exist). We just re-raise the exception.
             raise
-
-
-def generate_random_hex_color():
-    return "#{:06x}".format(random.randint(0,0xFFFFFF))
 
 
 def get_user_file_path(instance, filename):
