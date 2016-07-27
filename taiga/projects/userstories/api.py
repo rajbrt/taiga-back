@@ -59,6 +59,7 @@ class UserStoryViewSet(OCCResourceMixin, VotedResourceMixin, HistoryResourceMixi
     permission_classes = (permissions.UserStoryPermission,)
     filter_backends = (base_filters.CanViewUsFilterBackend,
                        filters.EpicsFilter,
+                       filters.EpicFilter,
                        base_filters.OwnersFilter,
                        base_filters.AssignedToFilter,
                        base_filters.StatusesFilter,
@@ -76,6 +77,7 @@ class UserStoryViewSet(OCCResourceMixin, VotedResourceMixin, HistoryResourceMixi
     order_by_fields = ["backlog_order",
                        "sprint_order",
                        "kanban_order",
+                       "epic_order",
                        "total_voters"]
 
     def get_serializer_class(self, *args, **kwargs):
@@ -98,9 +100,11 @@ class UserStoryViewSet(OCCResourceMixin, VotedResourceMixin, HistoryResourceMixi
 
         include_attachments = "include_attachments" in self.request.QUERY_PARAMS
         include_tasks = "include_tasks" in self.request.QUERY_PARAMS
+        epic_id =  self.request.QUERY_PARAMS.get("epic", None)
         qs = attach_extra_info(qs, user=self.request.user,
                                include_attachments=include_attachments,
-                               include_tasks=include_tasks)
+                               include_tasks=include_tasks,
+                               epic_id=epic_id)
 
         return qs
 
